@@ -3,46 +3,40 @@ package pcd.ass01;
 import javax.swing.*;
 import java.awt.*;
 
-public class BoidsPanel extends JPanel {
+final class BoidsPanel extends JPanel {
 
-	private BoidsView view; 
-	private BoidsModel model;
+    private final BoidsView view;
+    private final BoidsModel model;
     private int framerate;
 
-    public BoidsPanel(BoidsView view, BoidsModel model) {
-    	this.model = model;
-    	this.view = view;
+    public BoidsPanel(final BoidsView view, final BoidsModel model) {
+        this.model = model;
+        this.view = view;
     }
 
-    public void setFrameRate(int framerate) {
-    	this.framerate = framerate;
+    public void setFrameRate(final int framerate) {
+        this.framerate = framerate;
     }
-    
+
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paintComponent(final Graphics graphics) {
+        super.paintComponent(graphics);
         setBackground(Color.WHITE);
-        
-        var w = view.getWidth();
-        var h = view.getHeight();
-        var envWidth = model.getWidth();
-        var xScale = w/envWidth;
-        // var envHeight = model.getHeight();
-        // var yScale = h/envHeight;
-
-        var boids = model.getBoids();
-
-        g.setColor(Color.BLUE);
-        for (Boid boid : boids) {
-        	var x = boid.getPos().x();
-        	var y = boid.getPos().y();
-        	int px = (int)(w/2 + x*xScale);
-        	int py = (int)(h/2 - y*xScale);
-            g.fillOval(px,py, 5, 5);
+        final var width = view.getWidth();
+        final var height = view.getHeight();
+        final var envWidth = model.getWidth();
+        final var xScale = width / envWidth;
+        final var boids = model.getBoids();
+        graphics.setColor(Color.BLUE);
+        for (final var boid : boids) {
+            final var x = boid.getPosition().x();
+            final var y = boid.getPosition().y();
+            final var px = (int) ((double) width / 2 + x * xScale);
+            final var py = (int) ((double) height / 2 - y * xScale);
+            graphics.fillOval(px, py, 5, 5);
         }
-        
-        g.setColor(Color.BLACK);
-        g.drawString("Num. Boids: " + boids.size(), 10, 25);
-        g.drawString("Framerate: " + framerate, 10, 40);
-   }
+        graphics.setColor(Color.BLACK);
+        graphics.drawString("Num. Boids: " + boids.size(), 10, 25);
+        graphics.drawString("Framerate: " + framerate, 10, 40);
+    }
 }
