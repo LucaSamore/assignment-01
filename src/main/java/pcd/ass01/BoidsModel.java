@@ -14,6 +14,7 @@ final class BoidsModel {
     private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
+    private int boidsCount;
 
     public BoidsModel(final int numBoids,
                       final double initialSeparationWeight,
@@ -32,16 +33,19 @@ final class BoidsModel {
         this.maxSpeed = maxSpeed;
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
+    }
+
+    public synchronized void createBoids(final int numBoids) {
+        this.boidsCount = numBoids;
+        this.boids.clear();
         for (var i = 0; i < numBoids; i++) {
-            final var position = new Point2D(-width / 2 + Math.random() * width,
-                    -height / 2 + Math.random() * height);
-            final var velocity = new Vector2D(Math.random() * maxSpeed / 2 - maxSpeed / 4,
-                    Math.random() * maxSpeed / 2 - maxSpeed / 4);
+            final var position = new Point2D(-this.width / 2 + Math.random() * this.width, -this.height / 2 + Math.random() * this.height);
+            final var velocity = new Vector2D(Math.random() * this.maxSpeed / 2 - this.maxSpeed / 4, Math.random() * this.maxSpeed / 2 - this.maxSpeed / 4);
             this.boids.add(new Boid(position, velocity));
         }
     }
 
-    public List<Boid> getBoids() {
+    public synchronized List<Boid> getBoids() {
         return this.boids;
     }
 
@@ -69,27 +73,27 @@ final class BoidsModel {
         return this.height;
     }
 
-    public void setSeparationWeight(final double value) {
+    public synchronized void setSeparationWeight(final double value) {
         this.separationWeight = value;
     }
 
-    public void setAlignmentWeight(final double value) {
+    public synchronized void setAlignmentWeight(final double value) {
         this.alignmentWeight = value;
     }
 
-    public void setCohesionWeight(final double value) {
+    public synchronized void setCohesionWeight(final double value) {
         this.cohesionWeight = value;
     }
 
-    public double getSeparationWeight() {
+    public synchronized double getSeparationWeight() {
         return this.separationWeight;
     }
 
-    public double getCohesionWeight() {
+    public synchronized double getCohesionWeight() {
         return this.cohesionWeight;
     }
 
-    public double getAlignmentWeight() {
+    public synchronized double getAlignmentWeight() {
         return this.alignmentWeight;
     }
 
@@ -103,5 +107,9 @@ final class BoidsModel {
 
     public double getPerceptionRadius() {
         return this.perceptionRadius;
+    }
+
+    public void resetBoids() {
+        this.createBoids(this.boidsCount);
     }
 }

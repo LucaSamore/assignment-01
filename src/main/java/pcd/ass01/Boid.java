@@ -13,7 +13,7 @@ final class Boid {
         this.velocity = velocity;
     }
 
-    public void updateVelocity(final BoidsModel model) {
+    public synchronized void updateVelocity(final BoidsModel model) {
         final var nearbyBoids = getNearbyBoids(model);
         final var separation = calculateSeparation(nearbyBoids, model);
         final var alignment = calculateAlignment(nearbyBoids);
@@ -28,7 +28,7 @@ final class Boid {
         }
     }
 
-    public void updatePosition(final BoidsModel model) {
+    public synchronized void updatePosition(final BoidsModel model) {
         this.position = this.position.sum(this.velocity);
         if (position.x() < model.getMinX()) {
             this.position = this.position.sum(new Vector2D(model.getWidth(), 0));
