@@ -15,6 +15,7 @@ final class BoidsSimulation {
     private static final int SCREEN_HEIGHT = 800;
 
     public static void main(final String... args) {
+        final var numThreads = Runtime.getRuntime().availableProcessors() + 1;
         final var model = new BoidsModel(
                 N_BOIDS,
                 SEPARATION_WEIGHT,
@@ -26,7 +27,7 @@ final class BoidsSimulation {
                 PERCEPTION_RADIUS,
                 AVOID_RADIUS
         );
-        final var simulator = new BoidsSimulator(model);
+        final var simulator = new BoidsSimulator(model, numThreads);
         final var view = new BoidsView(model, SCREEN_WIDTH, SCREEN_HEIGHT);
         simulator.attachView(view);
         simulator.runSimulation();
